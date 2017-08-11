@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head lang="en">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <title>分布图</title>
+  <meta name="description" content="" />
+  <meta name="keywords" content="" />
+  
+
+  <!--[if IE]>
+  <script src="../../js/html5.js" type="text/javascript" charset="utf-8"></script>
+  <![endif]-->
+  <!--[if lte IE 8]>
+  <script src="../../js/respond.min.js" type="text/javascript" charset="utf-8"></script>
+  <![endif]-->
+</head>
+<body>
+<!-- 头部 -->
+<header id="hd" style="height:90px;background: #005A84">
+
+</header>
+<!-- 头部 end -->
+<!-- 主体 -->
+<article>
+
+  
+  <div class="search_null">
+    <div id="ditu_charts" style="width: 100%;height:800px;"></div>
+  </div>
+</article>
+</body>
+<script src="./echarts.min.js"></script>
+ <!-- <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script> -->
+ <script type="text/javascript" src="./china.js"></script>
+ <script type="text/javascript"> 
+  
+var dom = document.getElementById("ditu_charts");
+if(dom.length != 0){
+  var myChart = echarts.init(dom);
+  var app = {};
+  var data = [
+      {name: '北京', value: 9},
+      {name: '上海', value: 12},
+      {name: '天津', value: 12},
+      {name: '重庆', value: 12},
+      {name: '齐齐哈尔', value: 14},
+      {name: '哈尔滨', value: 15},
+      {name: '长春', value: 16},
+      {name: '沈阳', value: 118},
+      {name: '呼和浩特', value: 18},
+      {name: '石家庄', value: 19},
+      {name: '太原', value: 21},
+      {name: '济南', value: 23},
+      {name: '郑州', value: 24},
+      {name: '西安', value: 24},
+      {name: '兰州', value: 25},
+      {name: '银川', value: 25},
+      {name: '西宁', value: 25},
+      {name: '乌鲁木齐', value: 26},
+      {name: '合肥', value: 27},
+      {name: '南京', value: 30},
+      {name: '杭州', value: 38},
+      {name: '长沙', value: 43},
+      {name: '南昌', value: 54},
+      {name: '武汉', value: 54},
+      {name: '成都', value: 54},
+      {name: '贵阳', value: 57},
+      {name: '福州', value: 72},
+      {name: '台北', value: 72},
+      {name: '广州', value: 72},
+      {name: '海口', value: 72},
+      {name: '南宁', value: 72},
+      {name: '昆明', value: 72},
+      {name: '拉萨', value: 72},
+      {name: '香港', value: 72},
+  ];
+
+  var geoCoordMap = {
+     '北京':[116.46,39.92],
+     '上海':[121.29,31.14],
+     '天津':[117.2,39.13],
+     '重庆':[106.32,29.32],
+     '哈尔滨':[126.41,45.45],
+  　 '长春':[125.19,43.52],
+  　 '沈阳':[123.24,41.50],
+     '呼和浩特':[111.48,40.49],
+  　 '石家庄':[114.28,38.02],
+  　 '太原':[112.34,37.52],
+     '济南':[117,36.38],
+     '郑州':[113.42,34.48],
+     '西安':[108.54,34.16],
+     '兰州':[103.49,36.03],
+     '银川':[106.16,38.20],
+     '西宁':[101.45,36.38],
+     '乌鲁木齐':[ 87.36,43.48],
+     '合肥':[117.18,31.51],
+     '南京':[118.50,32.02],
+     '杭州':[120.09,30.14],
+     '长沙':[113,28.11],
+     '南昌':[115.52,28.41],
+     '武汉':[114.21,30.37],
+     '成都':[104.05,30.39],
+     '贵阳':[106.42,26.35],
+     '福州':[119.18,26.05],
+     '台北':[121.31,25.03],
+     '广州':[113.15,23.08],
+     '海口':[110.20,20.02],
+     '南宁':[108.20,22.48],
+     '昆明':[102.41,25],
+     '拉萨':[91.10,29.40],
+     '香港':[114.10,22.18],
+  };
+
+  function convertData(data) {
+     var res = [];
+     for (var i = 0; i < data.length; i++) {
+         var geoCoord = geoCoordMap[data[i].name];
+         if (geoCoord) {
+             res.push({
+                 name: data[i].name,
+                 value: geoCoord.concat(data[i].value)
+             });
+         }
+     }
+     return res;
+  };
+
+  function randomValue() {
+      return Math.round(Math.random()*1000);
+  };
+
+  var option = {
+      tooltip: {show: false},
+      visualMap: {
+          min: 0,
+          max: 1500,
+          left: '20%',
+          top: 'bottom',
+          text: ['High','Low'],
+          seriesIndex: [1],
+          inRange: {
+              color: ['#e0ffff', '#006edd']
+          },
+          calculable : false
+      },
+      geo: {
+          map: 'china',
+          roam: 'scale',
+          scaleLimit:{
+            max:'1.2',
+            min:'0.7'
+          },
+          label: {
+              normal: {
+                  show: true,
+                  textStyle: {
+                      color: 'rgba(0,0,0,0.8)'
+                  }
+              }
+          },
+          itemStyle: {
+              normal:{
+                  borderColor: 'rgba(0, 0, 0, 0.2)'
+              },
+              emphasis:{
+                  areaColor: null,
+                  shadowOffsetX: 0,
+                  shadowOffsetY: 0,
+                  shadowBlur: 20,
+                  borderWidth: 0,
+                  shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
+          }
+      },
+      series : [
+         {
+             type: 'scatter',
+             coordinateSystem: 'geo',
+             data: convertData(data),
+             symbolSize: 20,
+             symbol: 'path://M35.025,17.608c-5.209-4.786-11.483-2.301-15.303-4.281v-1.482c0-0.41-0.333-0.743-0.743-0.743c-0.411,0-0.743,0.333-0.743,0.743v24.682c-1.855,0.104-3.261,0.59-3.261,1.175c0,0.661,1.793,1.197,4.005,1.197c2.21,0,4.003-0.536,4.003-1.197c0-0.585-1.405-1.071-3.261-1.175V26.151C24.575,24.573,28.408,17.166,35.025,17.608z',
+             symbolRotate: 0,
+             symbolOffset:['50%','-100%'],
+             label: {
+                 normal: {
+                     formatter: '{b}',
+                     position: 'right',
+                     show: false
+                 },
+                 emphasis: {
+                     show: true
+                 }
+             },
+             itemStyle: {
+                 normal: {
+                      color: '#F06C00'
+                 }
+             }
+          },
+          {
+              name: 'categoryA',
+              type: 'map',
+              geoIndex: 0,
+              tooltip: {show: false},
+              data:[
+                  {name: '北京', value: randomValue()},
+                  {name: '天津', value: randomValue()},
+                  {name: '上海', value: randomValue()},
+                  {name: '重庆', value: randomValue()},
+                  {name: '河北', value: randomValue()},
+                  {name: '河南', value: randomValue()},
+                  {name: '云南', value: randomValue()},
+                  {name: '辽宁', value: randomValue()},
+                  {name: '黑龙江', value: randomValue()},
+                  {name: '湖南', value: randomValue()},
+                  {name: '安徽', value: randomValue()},
+                  {name: '山东', value: randomValue()},
+                  {name: '新疆', value: randomValue()},
+                  {name: '江苏', value: randomValue()},
+                  {name: '浙江', value: randomValue()},
+                  {name: '江西', value: randomValue()},
+                  {name: '湖北', value: randomValue()},
+                  {name: '广西', value: randomValue()},
+                  {name: '甘肃', value: randomValue()},
+                  {name: '山西', value: randomValue()},
+                  {name: '内蒙古', value: randomValue()},
+                  {name: '陕西', value: randomValue()},
+                  {name: '吉林', value: randomValue()},
+                  {name: '福建', value: randomValue()},
+                  {name: '贵州', value: randomValue()},
+                  {name: '广东', value: randomValue()},
+                  {name: '青海', value: randomValue()},
+                  {name: '西藏', value: randomValue()},
+                  {name: '四川', value: randomValue()},
+                  {name: '宁夏', value: randomValue()},
+                  {name: '海南', value: randomValue()},
+                  {name: '台湾', value: randomValue()},
+                  {name: '香港', value: randomValue()},
+                  {name: '澳门', value: randomValue()}
+              ]
+          }
+      ]
+  };
+  
+  myChart.setOption(option, true);
+
+}
+</script>
+</html>
